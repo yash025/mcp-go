@@ -473,7 +473,7 @@ func (s *SSEServer) handleMessage(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 
 	// Create a new context for handling the message that will be canceled when the message handling is done
-	sessionCtx, cancel := context.WithCancel(detachedCtx)
+	messageCtx, cancel := context.WithCancel(detachedCtx)
 
 	go func(ctx context.Context) {
 		defer cancel()
@@ -502,7 +502,7 @@ func (s *SSEServer) handleMessage(w http.ResponseWriter, r *http.Request) {
 				log.Printf("Event queue full for session %s", sessionID)
 			}
 		}
-	}(sessionCtx)
+	}(messageCtx)
 }
 
 // writeJSONRPCError writes a JSON-RPC error response with the given error details.
